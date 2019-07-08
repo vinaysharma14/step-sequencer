@@ -1,0 +1,44 @@
+.playbar {
+  background-color: #1f222b;
+  height: 50px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin-top: 60px;
+  border-radius: 10px;
+  border: 1px solid #3c4457;
+  width: 50%;
+}
+
+.col {
+  color: white;
+  text-align: center;
+  height: 50px;
+  line-height: 50px;
+  font-size: 20px;
+}
+
+.border-left {
+  border-left: 1px solid #3c4457 !important;
+}
+
+.playbar-icon :hover {
+  cursor: pointer;
+}
+
+span :hover {
+  cursor: pointer;
+}
+
+.metronome-icon {
+  height: 22px;
+}
+
+#bpm_input {
+  height: 30px;
+  background: none;
+  color: white;
+  border: none;
+  width: 40px;
+  outline: none
+}

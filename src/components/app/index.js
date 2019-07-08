@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
-import './style.css';
 
+import PlayBar from '../PlayBar';
+
+import './style.css';
 class App extends Component {
   render() {
     return (
       <div className="app">
+        <PlayBar />
       </div>
     );
   }
