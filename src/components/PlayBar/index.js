@@ -27,7 +27,7 @@ class PlayBar extends Component {
           </Col>
           <Col className="border-left">
             <input
-              value="128"
+              defaultValue="100"
               id="bpm_input"
               type="text"
               name="name" />
