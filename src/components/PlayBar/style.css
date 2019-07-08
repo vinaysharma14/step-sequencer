@@ -32,6 +32,7 @@ span :hover {
 
 .metronome-icon {
   height: 22px;
+  user-select: none;
 }
 
 #bpm_input {
@@ -41,4 +42,12 @@ span :hover {
   border: none;
   width: 40px;
   outline: none
+}
+
+.inactive {
+  color: gray;
+}
+
+.metronome-inactive {
+  filter: invert(0.5);
 }
