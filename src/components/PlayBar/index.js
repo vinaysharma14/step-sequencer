@@ -57,10 +57,7 @@ class PlayBar extends Component {
     }
 
     if (playBarStore.metronomeActive) {
-      this.beatIncrementer = setInterval(
-        this.incrementBeat,
-        (60 / playBarStore.bpmCount) * 1000
-      );
+      this.triggerBeatIncrement();
       this.incrementBeat();
     } else {
       this.stopBeatIncrement();
@@ -90,10 +87,7 @@ class PlayBar extends Component {
       playBarStore.handleBpmChange(Number(bpmCount).toString());
       if (playBarStore.metronomeActive) {
         this.stopBeatIncrement();
-        this.beatIncrementer = setInterval(
-          this.incrementBeat,
-          (60 / bpmCount) * 1000
-        );
+        this.triggerBeatIncrement();
       }
     }
   }
@@ -120,17 +114,11 @@ class PlayBar extends Component {
       this.setState({
         beatCount: 0,
       }, () => {
-        this.beatIncrementer = setInterval(
-          this.incrementBeat,
-          (60 / playBarStore.bpmCount) * 1000
-        );
+        this.triggerBeatIncrement();
         this.incrementBeat();
       });
     } else {
-      this.beatIncrementer = setInterval(
-        this.incrementBeat,
-        (60 / playBarStore.bpmCount) * 1000
-      );
+      this.triggerBeatIncrement();
       this.incrementBeat();
     }
     playBarStore.playAudio();
@@ -140,6 +128,14 @@ class PlayBar extends Component {
     const { playBarStore } = this.props.store;
     playBarStore.pauseAudio();
     clearInterval(this.beatIncrementer);
+  }
+
+  triggerBeatIncrement = () => {
+    const { playBarStore } = this.props.store;
+    this.beatIncrementer = setInterval(
+      this.incrementBeat,
+      (60 / playBarStore.bpmCount) * 1000
+    );
   }
 
   render() {
