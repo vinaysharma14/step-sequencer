@@ -6,6 +6,7 @@ export const PlayBarStore = types.model('PlayBarStore', {
   stopped: true,
   metronomeActive: false,
   bpmCount: '100',
+  beatCount: 0,
 }).actions((self) => ({
   playAudio() {
     self.playing = true;
@@ -27,6 +28,12 @@ export const PlayBarStore = types.model('PlayBarStore', {
   },
   handleBpmChange(bpmCount) {
     self.bpmCount = bpmCount;
+  },
+  handleBeatCountChange() {
+    self.beatCount = (self.beatCount + 1) % 4;
+  },
+  resetBeatCount() {
+    self.beatCount = 0;
   },
 }));
 

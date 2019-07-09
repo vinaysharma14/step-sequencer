@@ -17,20 +17,15 @@ class PlayBar extends Component {
     this.tick.load();
     this.tock = new Audio(tock);
     this.tock.load();
-    this.state = {
-      beatCount: 0,
-    }
   }
 
   incrementBeat = () => {
-    const { beatCount } = this.state;
-    const { metronomeActive } = this.props.store.playBarStore;
+    const { beatCount, metronomeActive, handleBeatCountChange } = this.props.store.playBarStore;
+    console.log(beatCount);
     if (metronomeActive) {
       this.playMetronome(beatCount);
     }
-    this.setState(prevState => ({
-      beatCount: (prevState.beatCount + 1) % 4,
-    }));
+    handleBeatCountChange();
   }
 
   playMetronome(beatCount) {
@@ -43,9 +38,8 @@ class PlayBar extends Component {
 
   stopBeatIncrement = () => {
     clearInterval(this.beatIncrementer);
-    this.setState({
-      beatCount: 0.
-    });
+    const { resetBeatCount } = this.props.store.playBarStore;
+    resetBeatCount();
   }
 
   toggleMetronome = () => {
@@ -111,12 +105,9 @@ class PlayBar extends Component {
     const { playBarStore } = this.props.store;
     if (playBarStore.metronomeActive && playBarStore.stopped) {
       clearInterval(this.beatIncrementer);
-      this.setState({
-        beatCount: 0,
-      }, () => {
-        this.triggerBeatIncrement();
-        this.incrementBeat();
-      });
+      playBarStore.resetBeatCount();
+      this.triggerBeatIncrement();
+      this.incrementBeat();
     } else {
       this.triggerBeatIncrement();
       this.incrementBeat();
