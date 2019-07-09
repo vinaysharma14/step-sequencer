@@ -5,9 +5,57 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlay, faStop } from '@fortawesome/free-solid-svg-icons'
 
+import tick from '../../assets/sounds/tick.wav';
+import tock from '../../assets/sounds/tock.wav';
+
 import './style.css';
 
 class PlayBar extends Component {
+  constructor(props) {
+    super(props);
+    this.tick = new Audio(tick);
+    this.tick.load();
+    this.tock = new Audio(tock);
+    this.tock.load();
+    this.state = {
+      beatCount: 0,
+    }
+  }
+
+  playMetronome = () => {
+    const { beatCount } = this.state;
+    if (beatCount % 4 === 0) {
+      this.tick.play();
+    } else {
+      this.tock.play();
+    }
+    this.setState(prevState => ({
+      beatCount: (prevState.beatCount + 1) % 4,
+    }));
+  }
+
+  stopMetronome = () => {
+    clearInterval(this.metronomeTimer);
+    this.setState({
+      beatCount: 0.
+    });
+  }
+
+  toggleMetronome = () => {
+    const { playBarStore } = this.props.store;
+    if (playBarStore.metronomeActive) {
+      this.stopMetronome();
+      playBarStore.toggleMetronome();
+    } else {
+      this.metronomeTimer = setInterval(
+        this.playMetronome,
+        (60 / playBarStore.bpmCount) * 1000
+      );
+      playBarStore.toggleMetronome();
+      this.playMetronome();
+    }
+  }
+
   handleBpmChange = (event) => {
     const { playBarStore } = this.props.store;
     const bpmCount = event.target.value;
@@ -22,13 +70,20 @@ class PlayBar extends Component {
       return;
     }
 
-    if (Number(bpmCount) >=1 && Number(bpmCount) <=9 && bpmCount.length <= 2) {
+    if (Number(bpmCount) >= 1 && Number(bpmCount) <= 9 && bpmCount.length <= 2) {
       playBarStore.handleBpmChange(bpmCount);
       return;
     }
 
     if (Number(bpmCount) > 0 && Number(bpmCount) <= 999) {
       playBarStore.handleBpmChange(Number(bpmCount).toString());
+      if (playBarStore.metronomeActive) {
+        this.stopMetronome();
+        this.metronomeTimer = setInterval(
+          this.playMetronome,
+          (60 / bpmCount) * 1000
+        );
+      }
     }
   }
 
@@ -36,6 +91,15 @@ class PlayBar extends Component {
     const { playBarStore } = this.props.store;
     return Number(bpmCount) > Number(playBarStore.bpmCount);
 
+  }
+
+  stopAudio = () => {
+    const { playBarStore } = this.props.store;
+    if (playBarStore.metronomeActive) {
+      this.stopMetronome();
+      playBarStore.toggleMetronome();
+    }
+    playBarStore.stopAudio();
   }
 
   render() {
@@ -53,7 +117,7 @@ class PlayBar extends Component {
             <FontAwesomeIcon
               className={playBarStore.stopped ? "playbar-icon" : "playbar-icon inactive"}
               icon={faStop}
-              onClick={playBarStore.stopAudio} />
+              onClick={this.stopAudio} />
           </Col>
           <Col className="border-left">
             <span>
@@ -61,7 +125,7 @@ class PlayBar extends Component {
                 className={playBarStore.metronomeActive ? "metronome-icon" : "metronome-icon metronome-inactive"}
                 src={require('../../assets/icons/metronome.png')}
                 alt=''
-                onClick={playBarStore.toggleMetronome} />
+                onClick={this.toggleMetronome} />
             </span>
           </Col>
           <Col className="border-left">
