@@ -79,6 +79,9 @@ class PlayBar extends Component {
 
     if (Number(bpmCount) > 0 && Number(bpmCount) <= 999) {
       playBarStore.handleBpmChange(Number(bpmCount).toString());
+      if (playBarStore.pauseAudio) {
+        return;
+      }
       if (playBarStore.metronomeActive) {
         this.stopBeatIncrement();
         this.triggerBeatIncrement();
