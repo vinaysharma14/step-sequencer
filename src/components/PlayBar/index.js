@@ -45,15 +45,14 @@ class PlayBar extends Component {
     const { playBarStore } = this.props.store;
     if (playBarStore.metronomeActive) {
       this.stopMetronome();
-      playBarStore.toggleMetronome();
     } else {
       this.metronomeTimer = setInterval(
         this.playMetronome,
         (60 / playBarStore.bpmCount) * 1000
       );
-      playBarStore.toggleMetronome();
       this.playMetronome();
     }
+    playBarStore.toggleMetronome();
   }
 
   handleBpmChange = (event) => {
@@ -96,8 +95,7 @@ class PlayBar extends Component {
   stopAudio = () => {
     const { playBarStore } = this.props.store;
     if (playBarStore.metronomeActive) {
-      this.stopMetronome();
-      playBarStore.toggleMetronome();
+      this.toggleMetronome();
     }
     playBarStore.stopAudio();
   }
