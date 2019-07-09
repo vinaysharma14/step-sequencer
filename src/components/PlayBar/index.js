@@ -22,20 +22,27 @@ class PlayBar extends Component {
     }
   }
 
-  playMetronome = () => {
+  incrementBeat = () => {
     const { beatCount } = this.state;
-    if (beatCount % 4 === 0) {
-      this.tick.play();
-    } else {
-      this.tock.play();
+    const { metronomeActive } = this.props.store.playBarStore;
+    if (metronomeActive) {
+      this.playMetronome(beatCount);
     }
     this.setState(prevState => ({
       beatCount: (prevState.beatCount + 1) % 4,
     }));
   }
 
-  stopMetronome = () => {
-    clearInterval(this.metronomeTimer);
+  playMetronome(beatCount) {
+    if (beatCount % 4 === 0) {
+      this.tick.play();
+    } else {
+      this.tock.play();
+    }
+  }
+
+  stopBeatIncrement = () => {
+    clearInterval(this.beatIncrementer);
     this.setState({
       beatCount: 0.
     });
@@ -43,16 +50,16 @@ class PlayBar extends Component {
 
   toggleMetronome = () => {
     const { playBarStore } = this.props.store;
+    playBarStore.toggleMetronome();
     if (playBarStore.metronomeActive) {
-      this.stopMetronome();
-    } else {
-      this.metronomeTimer = setInterval(
-        this.playMetronome,
+      this.beatIncrementer = setInterval(
+        this.incrementBeat,
         (60 / playBarStore.bpmCount) * 1000
       );
-      this.playMetronome();
+      this.incrementBeat();
+    } else {
+      this.stopBeatIncrement();
     }
-    playBarStore.toggleMetronome();
   }
 
   handleBpmChange = (event) => {
@@ -77,9 +84,9 @@ class PlayBar extends Component {
     if (Number(bpmCount) > 0 && Number(bpmCount) <= 999) {
       playBarStore.handleBpmChange(Number(bpmCount).toString());
       if (playBarStore.metronomeActive) {
-        this.stopMetronome();
-        this.metronomeTimer = setInterval(
-          this.playMetronome,
+        this.stopBeatIncrement();
+        this.beatIncrementer = setInterval(
+          this.incrementBeat,
           (60 / bpmCount) * 1000
         );
       }
