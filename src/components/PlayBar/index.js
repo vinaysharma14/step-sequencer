@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { Container, Row, Col } from 'react-bootstrap';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlay, faStop } from '@fortawesome/free-solid-svg-icons'
+import { faPlay, faPause, faStop } from '@fortawesome/free-solid-svg-icons'
 
 import tick from '../../assets/sounds/tick.wav';
 import tock from '../../assets/sounds/tock.wav';
@@ -51,6 +51,11 @@ class PlayBar extends Component {
   toggleMetronome = () => {
     const { playBarStore } = this.props.store;
     playBarStore.toggleMetronome();
+
+    if (playBarStore.playing || playBarStore.paused) {
+      return;
+    }
+
     if (playBarStore.metronomeActive) {
       this.beatIncrementer = setInterval(
         this.incrementBeat,
@@ -101,10 +106,40 @@ class PlayBar extends Component {
 
   stopAudio = () => {
     const { playBarStore } = this.props.store;
+    playBarStore.stopAudio();
+    this.stopBeatIncrement();
     if (playBarStore.metronomeActive) {
       this.toggleMetronome();
     }
-    playBarStore.stopAudio();
+  }
+
+  playAudio = () => {
+    const { playBarStore } = this.props.store;
+    if (playBarStore.metronomeActive && playBarStore.stopped) {
+      clearInterval(this.beatIncrementer);
+      this.setState({
+        beatCount: 0,
+      }, () => {
+        this.beatIncrementer = setInterval(
+          this.incrementBeat,
+          (60 / playBarStore.bpmCount) * 1000
+        );
+        this.incrementBeat();
+      });
+    } else {
+      this.beatIncrementer = setInterval(
+        this.incrementBeat,
+        (60 / playBarStore.bpmCount) * 1000
+      );
+      this.incrementBeat();
+    }
+    playBarStore.playAudio();
+  }
+
+  pauseAudio = () => {
+    const { playBarStore } = this.props.store;
+    playBarStore.pauseAudio();
+    clearInterval(this.beatIncrementer);
   }
 
   render() {
@@ -113,10 +148,20 @@ class PlayBar extends Component {
       <Container className="playbar">
         <Row>
           <Col>
-            <FontAwesomeIcon
-              className={playBarStore.playing ? "playbar-icon" : "playbar-icon inactive"}
-              icon={faPlay}
-              onClick={playBarStore.playAudio} />
+            {
+              (playBarStore.paused || playBarStore.stopped) &&
+              <FontAwesomeIcon
+                className={playBarStore.stopped ? "playbar-icon inactive" : "playbar-icon"}
+                icon={faPlay}
+                onClick={this.playAudio} />
+            }
+            {
+              playBarStore.playing &&
+              <FontAwesomeIcon
+                className={playBarStore.playing ? "playbar-icon" : "playbar-icon inactive"}
+                icon={faPause}
+                onClick={this.pauseAudio} />
+            }
           </Col>
           <Col className="border-left">
             <FontAwesomeIcon
