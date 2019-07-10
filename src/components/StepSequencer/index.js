@@ -5,90 +5,55 @@ import { Container, Row, Col } from 'react-bootstrap';
 import './style.css';
 
 class StepSequencer extends Component {
+  getBeatBarClass(beatActive, beatIndex) {
+    const { playing, paused } = this.props.store.playBarStore;
+    let { beatCount } = this.props.store.playBarStore;
+    let barClass = "beat-bar";
+
+    beatCount = beatCount - 1;
+    if (beatCount === -1) {
+      beatCount = 15;
+    }
+
+    if (beatIndex === beatCount && (playing || paused)) {
+      if (beatActive) {
+        return barClass.concat(" activePlay");
+      }
+      return barClass.concat(" playing");
+    }
+
+    if (beatActive) {
+      return barClass.concat(" active");
+    }
+
+    return barClass;
+  }
   render() {
-    const { beatCount, playing, paused } = this.props.store.playBarStore;
-    const beatBars = [];
-    for (var i = 0; i < 16; i++) {
-      beatBars.push(i);
-    }
-    let activeBar = beatCount - 1;
-    if (activeBar === -1) {
-      activeBar = 15;
-    }
+    const { channelRack, toggleBeatBar } = this.props.store.stepSequencerStore;
     return (
       <Container className="step-sequencer">
-        <Row>
-          <Col lg={3} className="mt-3">
-            <div className="sample-button">
-              Kick
-            </div>
-          </Col>
-          <Col lg={9} className="border-left">
-            <div className="sample-button mt-3 flex">
-              {
-                beatBars.map((item, index) =>
-                  <div
-                    key={index}
-                    className={(item === activeBar && (playing || paused)) ? "beat-bar active" : "beat-bar"}
-                  />)
-              }
-            </div>
-          </Col>
-        </Row>
-        <Row>
-          <Col lg={3} className="mt-3">
-            <div className="sample-button">
-              Snare
-            </div>
-          </Col>
-          <Col lg={9} className="border-left">
-            <div className="sample-button mt-3 flex">
-              {
-                beatBars.map((item, index) =>
-                  <div
-                    key={index}
-                    className={(item === activeBar && (playing || paused)) ? "beat-bar active" : "beat-bar"}
-                  />)
-              }
-            </div>
-          </Col>
-        </Row>
-        <Row>
-          <Col lg={3} className="mt-3">
-            <div className="sample-button">
-              Clap
-            </div>
-          </Col>
-          <Col lg={9} className="border-left">
-            <div className="sample-button mt-3 flex">
-              {
-                beatBars.map((item, index) =>
-                  <div
-                    key={index}
-                    className={(item === activeBar && (playing || paused)) ? "beat-bar active" : "beat-bar"}
-                  />)
-              }
-            </div>
-          </Col>
-        </Row>
-        <Row>
-          <Col lg={3} className="mt-3 mb-3">
-            <div className="sample-button">
-              Riders
-            </div>
-          </Col>
-          <Col lg={9} className="border-left">
-            <div className="sample-button mt-3 flex">
-              {
-                beatBars.map((item, index) =>
-                  <div
-                    key={index}
-                    className={(item === activeBar && (playing || paused)) ? "beat-bar active" : "beat-bar"}
-                  />)
-              }
-            </div>
-          </Col>
-        </Row>
+        {
+          channelRack.map((item, index) =>
+            <Row key={index}>
+              <Col lg={3} className={index === channelRack.length - 1 ? "mt-3 mb-3" : "mt-3"}>
+                <div className="sample-button">
+                  {item.sampleName}
+                </div>
+              </Col>
+              <Col lg={9} className="border-left">
+                <div className="sample-button mt-3 flex">
+                  {
+                    item.beatBars.map((beatActive, index) =>
+                      <div
+                        key={index}
+                        onClick={e => toggleBeatBar(item.sampleName, index)}
+                        className={this.getBeatBarClass(beatActive, index)}
+                      />)
+                  }
+                </div>
+              </Col>
+            </Row>)
+        }
       </Container>
     )
   }

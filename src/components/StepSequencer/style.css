@@ -40,6 +40,14 @@
 }
 
 .active {
+  background-color: black;
+}
+
+.playing {
   background-color: #1F273A !important;
   box-shadow: 0 0 12px 0 rgba(0,135,255,.8);
+}
+
+.activePlay {
+  background-color: white;
 }
