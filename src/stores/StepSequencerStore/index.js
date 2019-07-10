@@ -25,6 +25,15 @@ export const StepSequencerStore = types.model('StepSequencer', {
       });
     });
     self.channelRack = channelRack;
+  },
+  getActiveSamples(beatCount) {
+    let activeSamples = [];
+    for (var i = 0; i < self.channelRack.length; i++) {
+      if (self.channelRack[i].beatBars[beatCount]) {
+        activeSamples.push(self.channelRack[i].sampleName.toLowerCase());
+      }
+    }
+    return activeSamples;
   }
 }));
 

@@ -8,6 +8,11 @@ import { faPlay, faPause, faStop } from '@fortawesome/free-solid-svg-icons'
 import tick from '../../assets/sounds/tick.wav';
 import tock from '../../assets/sounds/tock.wav';
 
+import kick from '../../assets/sounds/kick.wav';
+import snare from '../../assets/sounds/snare.wav';
+import clap from '../../assets/sounds/clap.wav';
+import ride from '../../assets/sounds/ride.wav';
+
 import './style.css';
 
 class PlayBar extends Component {
@@ -20,11 +25,37 @@ class PlayBar extends Component {
   }
 
   incrementBeat = () => {
-    const { beatCount, metronomeActive, handleBeatCountChange } = this.props.store.playBarStore;
+    const { beatCount, metronomeActive, handleBeatCountChange, playing } = this.props.store.playBarStore;
+    const { getActiveSamples } = this.props.store.stepSequencerStore;
+    let activeSamples = [];
     if (metronomeActive) {
       this.playMetronome(beatCount);
     }
-    handleBeatCountChange();
+    if (playing) {
+      activeSamples = getActiveSamples(beatCount);
+      this.playBeats(activeSamples);
+    }
+    handleBeatCountChange(beatCount);
+  }
+
+  playBeats(activeSamples) {
+    if (activeSamples.includes('kick')) {
+      const kickSample = new Audio(kick);
+      kickSample.play();
+    }
+    if (activeSamples.includes('snare')) {
+      const snareSample = new Audio(snare);
+      snareSample.volume = 0.5;
+      snareSample.play();
+    }
+    if (activeSamples.includes('clap')) {
+      const clapSample = new Audio(clap);
+      clapSample.play();
+    }
+    if (activeSamples.includes('ride')) {
+      const rideSample = new Audio(ride);
+      rideSample.play();
+    }
   }
 
   playMetronome(beatCount) {
@@ -81,7 +112,7 @@ class PlayBar extends Component {
       if (playBarStore.paused) {
         return;
       }
-      if (playBarStore.metronomeActive) {
+      if (playBarStore.metronomeActive || playBarStore.playing) {
         this.stopBeatIncrement();
         this.triggerBeatIncrement();
       }
@@ -105,7 +136,8 @@ class PlayBar extends Component {
 
   playAudio = () => {
     const { playBarStore } = this.props.store;
-    if (playBarStore.metronomeActive && playBarStore.stopped) {
+    playBarStore.playAudio();
+    if (playBarStore.metronomeActive && playBarStore.playing) {
       clearInterval(this.beatIncrementer);
       playBarStore.resetBeatCount();
       this.triggerBeatIncrement();
@@ -114,7 +146,6 @@ class PlayBar extends Component {
       this.triggerBeatIncrement();
       this.incrementBeat();
     }
-    playBarStore.playAudio();
   }
 
   pauseAudio = () => {
