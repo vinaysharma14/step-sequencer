@@ -12,34 +12,20 @@ export const StepSequencerStore = types.model('StepSequencer', {
         break;
       }
     }
+  },
+  loadChannelRack() {
+    const samples = ['Kick', 'Snare', 'Clap', 'Ride'];
+    let channelRack = [];
+    samples.forEach((sample) => {
+      channelRack.push({
+        sampleName: sample,
+        isActive: true,
+        activeBeats: [],
+        beatBars: [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]
+      });
+    });
+    self.channelRack = channelRack;
   }
 }));
 
-export const StepSequencerStoreInstance = StepSequencerStore.create({
-  channelRack: [
-    {
-      sampleName: 'Kick',
-      isActive: true,
-      activeBeats: [],
-      beatBars: [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]
-    },
-    {
-      sampleName: 'Snare',
-      isActive: true,
-      activeBeats: [],
-      beatBars: [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]
-    },
-    {
-      sampleName: 'Clap',
-      isActive: true,
-      activeBeats: [],
-      beatBars: [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]
-    },
-    {
-      sampleName: 'Ride',
-      isActive: true,
-      activeBeats: [],
-      beatBars: [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]
-    },
-  ]
-});
+export const StepSequencerStoreInstance = StepSequencerStore.create({});

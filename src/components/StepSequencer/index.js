@@ -5,6 +5,12 @@ import { Container, Row, Col } from 'react-bootstrap';
 import './style.css';
 
 class StepSequencer extends Component {
+  constructor(props) {
+    super(props);
+    const { loadChannelRack } = this.props.store.stepSequencerStore;
+    loadChannelRack();
+  }
+
   getBeatBarClass(beatActive, beatIndex) {
     const { playing, paused } = this.props.store.playBarStore;
     let { beatCount } = this.props.store.playBarStore;
