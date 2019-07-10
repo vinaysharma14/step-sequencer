@@ -21,7 +21,6 @@ class PlayBar extends Component {
 
   incrementBeat = () => {
     const { beatCount, metronomeActive, handleBeatCountChange } = this.props.store.playBarStore;
-    console.log(beatCount);
     if (metronomeActive) {
       this.playMetronome(beatCount);
     }
