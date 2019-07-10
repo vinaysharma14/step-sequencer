@@ -29,9 +29,9 @@ class PlayBar extends Component {
   }
 
   playMetronome(beatCount) {
-    if (beatCount % 4 === 0) {
+    if (beatCount === 0) {
       this.tick.play();
-    } else {
+    } else if (beatCount === 4 || beatCount === 8 || beatCount === 12) {
       this.tock.play();
     }
   }
@@ -79,7 +79,7 @@ class PlayBar extends Component {
 
     if (Number(bpmCount) > 0 && Number(bpmCount) <= 999) {
       playBarStore.handleBpmChange(Number(bpmCount).toString());
-      if (playBarStore.pauseAudio) {
+      if (playBarStore.paused) {
         return;
       }
       if (playBarStore.metronomeActive) {
@@ -128,7 +128,7 @@ class PlayBar extends Component {
     const { playBarStore } = this.props.store;
     this.beatIncrementer = setInterval(
       this.incrementBeat,
-      (60 / playBarStore.bpmCount) * 1000
+      (60 / playBarStore.bpmCount) * 250
     );
   }
 
