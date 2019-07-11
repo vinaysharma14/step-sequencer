@@ -11,26 +11,26 @@ import StepSequencer from '../StepSequencer';
 import './style.css';
 
 class App extends Component {
-  playBeats = (beatCount) => {
+  playBeats = (beatCount, previewSample) => {
     const { getActiveSamples, getSampleVolume } = this.props.store.stepSequencerStore;
     const activeSamples = getActiveSamples(beatCount);
 
-    if (activeSamples.includes('kick')) {
+    if (activeSamples.includes('kick') || previewSample === 0) {
       const kickSample = new Audio(kick);
       kickSample.volume = getSampleVolume(0);
       kickSample.play();
     }
-    if (activeSamples.includes('snare')) {
+    if (activeSamples.includes('snare') || previewSample === 1) {
       const snareSample = new Audio(snare);
       snareSample.volume = getSampleVolume(1);
       snareSample.play();
     }
-    if (activeSamples.includes('clap')) {
+    if (activeSamples.includes('clap') || previewSample === 2) {
       const clapSample = new Audio(clap);
       clapSample.volume = getSampleVolume(2);
       clapSample.play();
     }
-    if (activeSamples.includes('ride')) {
+    if (activeSamples.includes('ride') || previewSample === 3) {
       const rideSample = new Audio(ride);
       rideSample.volume = getSampleVolume(3);
       rideSample.play();

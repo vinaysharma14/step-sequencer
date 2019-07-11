@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Container, Row, Col } from 'react-bootstrap';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faMusic } from '@fortawesome/free-solid-svg-icons'
+
 import ChannelRackSettings from './ChannelRackSettings'
 import './style.css';
 
@@ -35,8 +38,11 @@ class StepSequencer extends Component {
 
     return barClass;
   }
+
   render() {
     const { channelRack, toggleBeatBar } = this.props.store.stepSequencerStore;
+    const { playBeats } = this.props;
+
     return (
       <Container className="step-sequencer">
         {
@@ -45,6 +51,11 @@ class StepSequencer extends Component {
               <Col lg={2} className={sampleIndex === channelRack.length - 1 ? "mt-3 mb-3" : "mt-3"}>
                 <div className="sample-button">
                   {item.sampleName}
+                  <FontAwesomeIcon
+                    icon={faMusic}
+                    className="sample-preview"
+                    onClick={e => playBeats(null, sampleIndex)}
+                  />
                 </div>
               </Col>
               <Col lg={6} className="border-left">

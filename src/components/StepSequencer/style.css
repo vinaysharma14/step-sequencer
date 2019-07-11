@@ -51,3 +51,8 @@
 .activePlay {
   background-color: white;
 }
+
+.sample-preview {
+  float: right;
+  margin: 5px 25px 0px -20px;
+}
