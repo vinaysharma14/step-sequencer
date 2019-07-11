@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Container, Row, Col } from 'react-bootstrap';
 
+import ChannelRackSettings from './ChannelRackSettings'
 import './style.css';
 
 class StepSequencer extends Component {
@@ -29,7 +30,7 @@ class StepSequencer extends Component {
     }
 
     if (beatActive) {
-      return barClass.concat(" active");
+      return barClass.concat(" playing");
     }
 
     return barClass;
@@ -39,24 +40,30 @@ class StepSequencer extends Component {
     return (
       <Container className="step-sequencer">
         {
-          channelRack.map((item, index) =>
-            <Row key={index}>
-              <Col lg={3} className={index === channelRack.length - 1 ? "mt-3 mb-3" : "mt-3"}>
+          channelRack.map((item, sampleIndex) =>
+            <Row key={sampleIndex}>
+              <Col lg={2} className={sampleIndex === channelRack.length - 1 ? "mt-3 mb-3" : "mt-3"}>
                 <div className="sample-button">
                   {item.sampleName}
                 </div>
               </Col>
-              <Col lg={9} className="border-left">
+              <Col lg={6} className="border-left">
                 <div className="sample-button mt-3 flex">
                   {
                     item.beatBars.map((beatActive, index) =>
                       <div
                         key={index}
-                        onClick={e => toggleBeatBar(item.sampleName, index)}
+                        onClick={e => toggleBeatBar(sampleIndex, index)}
                         className={this.getBeatBarClass(beatActive, index)}
                       />)
                   }
                 </div>
+              </Col>
+              <Col lg={4} className="border-left">
+                <ChannelRackSettings
+                  sampleIndex={sampleIndex}
+                  sampleVolume={item.sampleVolume}
+                />
               </Col>
             </Row>)
         }

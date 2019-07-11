@@ -39,21 +39,25 @@ class PlayBar extends Component {
   }
 
   playBeats(activeSamples) {
+    const { getSampleVolume } = this.props.store.stepSequencerStore;
     if (activeSamples.includes('kick')) {
       const kickSample = new Audio(kick);
+      kickSample.volume = getSampleVolume(0);
       kickSample.play();
     }
     if (activeSamples.includes('snare')) {
       const snareSample = new Audio(snare);
-      snareSample.volume = 0.5;
+      snareSample.volume = getSampleVolume(1);
       snareSample.play();
     }
     if (activeSamples.includes('clap')) {
       const clapSample = new Audio(clap);
+      clapSample.volume = getSampleVolume(2);
       clapSample.play();
     }
     if (activeSamples.includes('ride')) {
       const rideSample = new Audio(ride);
+      rideSample.volume = getSampleVolume(3);
       rideSample.play();
     }
   }
