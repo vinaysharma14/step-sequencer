@@ -9,7 +9,7 @@ export const StepSequencerStore = types.model('StepSequencer', {
     self.channelRack[sampleIndex].beatBars[beatIndex] = !self.channelRack[sampleIndex].beatBars[beatIndex];
   },
   loadChannelRack() {
-    const samples = ['Kick', 'Snare', 'Clap', 'Ride'];
+    const samples = ['Kick', 'Snare', 'Clap', 'Ride', '808', 'Trap'];
     let channelRack = [];
     samples.forEach((sample) => {
       channelRack.push({

@@ -5,12 +5,18 @@ import kick from '../../assets/sounds/kick.wav';
 import snare from '../../assets/sounds/snare.wav';
 import clap from '../../assets/sounds/clap.wav';
 import ride from '../../assets/sounds/ride.wav';
+import trapKick from '../../assets/sounds/808.wav';
+import trapSnare from '../../assets/sounds/trap.wav';
 
 import PlayBar from '../PlayBar';
 import StepSequencer from '../StepSequencer';
 import './style.css';
 
 class App extends Component {
+  state ={
+    trapKickSample: new Audio(trapKick),
+  }
+
   playBeats = (beatCount, previewSample) => {
     const { getActiveSamples, getSampleVolume } = this.props.store.stepSequencerStore;
     const activeSamples = getActiveSamples(beatCount);
@@ -34,6 +40,26 @@ class App extends Component {
       const rideSample = new Audio(ride);
       rideSample.volume = getSampleVolume(3);
       rideSample.play();
+    }
+    if (activeSamples.includes('808') || previewSample === 4) {
+      const thisRef = this;
+      this.state.trapKickSample.pause();
+      this.setState({
+        trapKickSample: new Audio(trapKick),
+      }, () => {
+        const trapKickSample = thisRef.state.trapKickSample;
+        trapKickSample.volume = getSampleVolume(4);
+        this.setState({
+          trapKickSample: trapKickSample,
+        }, () => {
+          thisRef.state.trapKickSample.play();
+        })
+      })
+    }
+    if (activeSamples.includes('trap') || previewSample === 5) {
+      const trapSnareSample = new Audio(trapSnare);
+      trapSnareSample.volume = getSampleVolume(5);
+      trapSnareSample.play();
     }
   }
 
