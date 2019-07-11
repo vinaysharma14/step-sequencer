@@ -30,7 +30,7 @@ export const PlayBarStore = types.model('PlayBarStore', {
     self.bpmCount = bpmCount;
   },
   handleBeatCountChange() {
-    self.beatCount = (self.beatCount + 1) % 16;
+    self.beatCount = (self.beatCount + 1) % 32;
   },
   resetBeatCount() {
     self.beatCount = 0;

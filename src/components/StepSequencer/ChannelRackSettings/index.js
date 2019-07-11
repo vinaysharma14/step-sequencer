@@ -56,6 +56,11 @@ class ChannelRackSettings extends Component {
           onClick={e => this.setChannelFrequency(4)}
         >
           x4</p>
+        <p
+          className="cursor"
+          onClick={e => this.setChannelFrequency(8)}
+        >
+          x8</p>
         <FontAwesomeIcon
           icon={faUndo}
           className="cursor"

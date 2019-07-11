@@ -22,7 +22,7 @@ class StepSequencer extends Component {
 
     beatCount = beatCount - 1;
     if (beatCount === -1) {
-      beatCount = 15;
+      beatCount = 31;
     }
 
     if (beatIndex === beatCount && (playing || paused)) {

@@ -132,7 +132,7 @@ class PlayBar extends Component {
     const { playBarStore } = this.props.store;
     this.beatIncrementer = setInterval(
       this.incrementBeat,
-      (60 / playBarStore.bpmCount) * 250
+      (60 / playBarStore.bpmCount) * 125
     );
   }
 

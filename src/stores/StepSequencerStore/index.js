@@ -11,11 +11,15 @@ export const StepSequencerStore = types.model('StepSequencer', {
   loadChannelRack() {
     const samples = ['Kick', 'Snare', 'Clap', 'Ride', '808', 'Trap'];
     let channelRack = [];
+    let beatBars = [];
+    for (var i=0; i<32; i++) {
+      beatBars.push(false);
+    }
     samples.forEach((sample) => {
       channelRack.push({
         sampleName: sample,
         activeBeats: [],
-        beatBars: [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+        beatBars,
         sampleVolume: 75,
         mutedVolume: 75,
       });
@@ -47,7 +51,7 @@ export const StepSequencerStore = types.model('StepSequencer', {
     return self.channelRack[sampleIndex].sampleVolume / 100;
   },
   resetChannelRack(sampleIndex) {
-    self.channelRack[sampleIndex].beatBars.fill(false, 0, 31);
+    self.channelRack[sampleIndex].beatBars.fill(false, 0, 32);
   },
   setChannelFrequency(sampleIndex, frequencyCount) {
     for (let i = 0; i < self.channelRack[sampleIndex].beatBars.length; i++) {
