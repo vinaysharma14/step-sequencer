@@ -1,0 +1,28 @@
+.channel-settings {
+  padding-top: 10px;
+  height: 34px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.volumeSlider {
+  -webkit-appearance: none !important;
+  height: 1px;
+  margin-top: 8px;
+  background-color: white;
+  outline: none;
+}
+
+.volumeSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50px;
+  background-color: white;
+  cursor: pointer;
+}
+
+.cursor {
+  cursor: pointer;
+}
