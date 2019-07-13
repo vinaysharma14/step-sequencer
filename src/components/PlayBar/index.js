@@ -35,7 +35,7 @@ class PlayBar extends Component {
   playMetronome(beatCount) {
     if (beatCount === 0) {
       this.tick.play();
-    } else if (beatCount === 4 || beatCount === 8 || beatCount === 12) {
+    } else if (beatCount === 8 || beatCount === 16 || beatCount === 24) {
       this.tock.play();
     }
   }
