@@ -7,6 +7,7 @@ const ChannelRackStore = types.model('ChannelRackStore', {
   sampleVolume: types.number,
   mutedVolume: types.number,
   masterVolume: types.number,
+  base64: types.maybe(types.string),
 });
 
 export default ChannelRackStore;

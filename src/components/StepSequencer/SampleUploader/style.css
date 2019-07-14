@@ -1,0 +1,17 @@
+.hidden {
+  display: none;
+}
+
+.sample-uploader {
+  background-color: #3C4457;
+  border-radius: 5px;
+  text-align: center;
+  font-weight: lighter;
+  height: 34px;
+  padding-top: 5px;
+  padding-left: 45px;
+}
+
+.sample-uploader :hover {
+  cursor: pointer;
+}

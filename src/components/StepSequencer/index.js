@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMusic } from '@fortawesome/free-solid-svg-icons'
 
 import ChannelRackSettings from './ChannelRackSettings'
+import SampleUploader from './SampleUploader';
 import './style.css';
 
 class StepSequencer extends Component {
@@ -79,7 +80,10 @@ class StepSequencer extends Component {
             </Row>)
         }
         <Row>
-          <Col lg={12} className="mb-3">
+          <Col lg={2} className="mt-3 mb-3">
+            <SampleUploader />
+          </Col>
+          <Col lg={10}>
             <div className="master-settings">
               <ChannelRackSettings
                 masterSettings

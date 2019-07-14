@@ -33,7 +33,7 @@ export const StepSequencerStore = types.model('StepSequencer', {
     let activeSamples = [];
     for (var i = 0; i < self.channelRack.length; i++) {
       if (self.channelRack[i].beatBars[beatCount]) {
-        activeSamples.push(self.channelRack[i].sampleName.toLowerCase());
+        activeSamples.push(i);
       }
     }
     return activeSamples;
@@ -109,6 +109,40 @@ export const StepSequencerStore = types.model('StepSequencer', {
       channelRack.masterVolume = (channelRack.sampleVolume * (newMasterVolume / 100));
     }
     self.masterVolume = newMasterVolume;
+  },
+  handleSampleUpload(uploadedSample) {
+    let sampleName = uploadedSample.name.split('.')[0];
+    sampleName = sampleName.charAt(0).toUpperCase() + sampleName.slice(1);
+    let beatBars = [];
+    for (var i = 0; i < 32; i++) {
+      beatBars.push(false);
+    }
+    const newSample = {
+      sampleName,
+      activeBeats: [],
+      beatBars,
+      sampleVolume: 75,
+      mutedVolume: 75,
+      masterVolume: 75,
+      base64: uploadedSample.base64,
+    };
+    self.channelRack.push(newSample);
+  },
+  playUploadedSamples(beatCount, previewSample) {
+    const channelRack = self.channelRack;
+    if (previewSample && previewSample > 5) {
+      const uploadedSample = new Audio(channelRack[previewSample].base64);
+      uploadedSample.volume = this.getSampleVolume(previewSample);
+      uploadedSample.play();
+    } else {
+      for (var sampleIndex = 5; sampleIndex < channelRack.length; sampleIndex++) {
+        if (channelRack[sampleIndex].beatBars[beatCount]) {
+          const uploadedSample = new Audio(channelRack[sampleIndex].base64);
+          uploadedSample.volume = this.getSampleVolume(sampleIndex);
+          uploadedSample.play();
+        }
+      }
+    }
   }
 }));
 

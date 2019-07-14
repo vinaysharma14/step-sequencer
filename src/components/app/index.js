@@ -13,35 +13,41 @@ import StepSequencer from '../StepSequencer';
 import './style.css';
 
 class App extends Component {
-  state ={
+  state = {
     trapKickSample: new Audio(trapKick),
   }
 
   playBeats = (beatCount, previewSample) => {
+    const { playUploadedSamples } = this.props.store.stepSequencerStore;
+    this.playDefaultSamples(beatCount, previewSample);
+    playUploadedSamples(beatCount, previewSample);
+  }
+
+  playDefaultSamples = (beatCount, previewSample) => {
     const { getActiveSamples, getSampleVolume } = this.props.store.stepSequencerStore;
     const activeSamples = getActiveSamples(beatCount);
 
-    if (activeSamples.includes('kick') || previewSample === 0) {
+    if (activeSamples.includes(0) || previewSample === 0) {
       const kickSample = new Audio(kick);
       kickSample.volume = getSampleVolume(0);
       kickSample.play();
     }
-    if (activeSamples.includes('snare') || previewSample === 1) {
+    if (activeSamples.includes(1) || previewSample === 1) {
       const snareSample = new Audio(snare);
       snareSample.volume = getSampleVolume(1);
       snareSample.play();
     }
-    if (activeSamples.includes('clap') || previewSample === 2) {
+    if (activeSamples.includes(2) || previewSample === 2) {
       const clapSample = new Audio(clap);
       clapSample.volume = getSampleVolume(2);
       clapSample.play();
     }
-    if (activeSamples.includes('ride') || previewSample === 3) {
+    if (activeSamples.includes(3) || previewSample === 3) {
       const rideSample = new Audio(ride);
       rideSample.volume = getSampleVolume(3);
       rideSample.play();
     }
-    if (activeSamples.includes('808') || previewSample === 4) {
+    if (activeSamples.includes(4) || previewSample === 4) {
       const thisRef = this;
       this.state.trapKickSample.pause();
       this.setState({
@@ -56,7 +62,7 @@ class App extends Component {
         })
       })
     }
-    if (activeSamples.includes('trap') || previewSample === 5) {
+    if (activeSamples.includes(5) || previewSample === 5) {
       const trapSnareSample = new Audio(trapSnare);
       trapSnareSample.volume = getSampleVolume(5);
       trapSnareSample.play();
