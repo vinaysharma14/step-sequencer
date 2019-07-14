@@ -8,33 +8,53 @@ import './style.css';
 
 class ChannelRackSettings extends Component {
   handleVolumeChange = (event) => {
-    const { handleVolumeChange } = this.props.store.stepSequencerStore;
-    const { sampleIndex } = this.props;
+    const { handleVolumeChange, changeMasterVolume } = this.props.store.stepSequencerStore;
+    const { sampleIndex, masterSettings } = this.props;
     const sampleVolume = event.target.value;
+    if (masterSettings) {
+      changeMasterVolume(sampleVolume);
+      return;
+    }
     handleVolumeChange(sampleIndex, sampleVolume);
   }
 
   muteVolume = () => {
-    const { muteVolume } = this.props.store.stepSequencerStore;
-    const { sampleIndex } = this.props;
+    const { muteVolume, muteMaster } = this.props.store.stepSequencerStore;
+    const { sampleIndex, masterSettings } = this.props;
+    if (masterSettings) {
+      muteMaster();
+      return;
+    }
     muteVolume(sampleIndex);
   }
 
   unMuteVolume = () => {
-    const { unMuteVolume } = this.props.store.stepSequencerStore;
-    const { sampleIndex } = this.props;
+    const { unMuteVolume, unMuteMaster } = this.props.store.stepSequencerStore;
+    const { sampleIndex, masterSettings } = this.props;
+    if (masterSettings) {
+      unMuteMaster();
+      return;
+    }
     unMuteVolume(sampleIndex);
   }
 
   resetChannelRack = () => {
-    const { resetChannelRack } = this.props.store.stepSequencerStore;
-    const { sampleIndex } = this.props;
+    const { resetChannelRack, resetMaster } = this.props.store.stepSequencerStore;
+    const { sampleIndex, masterSettings } = this.props;
+    if (masterSettings) {
+      resetMaster();
+      return;
+    }
     resetChannelRack(sampleIndex);
   }
 
   setChannelFrequency = (frequencyCount) => {
-    const { setChannelFrequency } = this.props.store.stepSequencerStore;
-    const { sampleIndex } = this.props;
+    const { setChannelFrequency, setMasterFrequency } = this.props.store.stepSequencerStore;
+    const { sampleIndex, masterSettings } = this.props;
+    if (masterSettings) {
+      setMasterFrequency(frequencyCount);
+      return;
+    }
     setChannelFrequency(sampleIndex, frequencyCount);
   }
 
@@ -42,22 +62,22 @@ class ChannelRackSettings extends Component {
     return (
       <div className="channel-settings mt-3">
         <p
-          className="cursor"
+          className="cursor vertical-mid"
           onClick={e => this.setChannelFrequency(1)}
         >
           x1</p>
         <p
-          className="cursor"
+          className="cursor vertical-mid"
           onClick={e => this.setChannelFrequency(2)}
         >
           x2</p>
         <p
-          className="cursor"
+          className="cursor vertical-mid"
           onClick={e => this.setChannelFrequency(4)}
         >
           x4</p>
         <p
-          className="cursor"
+          className="cursor vertical-mid"
           onClick={e => this.setChannelFrequency(8)}
         >
           x8</p>

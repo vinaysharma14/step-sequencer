@@ -40,7 +40,7 @@ class StepSequencer extends Component {
   }
 
   render() {
-    const { channelRack, toggleBeatBar } = this.props.store.stepSequencerStore;
+    const { channelRack, toggleBeatBar, masterVolume } = this.props.store.stepSequencerStore;
     const { playBeats } = this.props;
 
     return (
@@ -48,7 +48,7 @@ class StepSequencer extends Component {
         {
           channelRack.map((item, sampleIndex) =>
             <Row key={sampleIndex}>
-              <Col lg={2} className={sampleIndex === channelRack.length - 1 ? "mt-3 mb-3" : "mt-3"}>
+              <Col lg={2} className="mt-3">
                 <div className="sample-button">
                   {item.sampleName}
                   <FontAwesomeIcon
@@ -73,11 +73,21 @@ class StepSequencer extends Component {
               <Col lg={4} className="border-left">
                 <ChannelRackSettings
                   sampleIndex={sampleIndex}
-                  sampleVolume={item.sampleVolume}
+                  sampleVolume={masterVolume !== 100 ? item.masterVolume : item.sampleVolume}
                 />
               </Col>
             </Row>)
         }
+        <Row>
+          <Col lg={12} className="mb-3">
+            <div className="master-settings">
+              <ChannelRackSettings
+                masterSettings
+                sampleVolume={masterVolume}
+              />
+            </div>
+          </Col>
+        </Row>
       </Container>
     )
   }

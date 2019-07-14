@@ -16,7 +16,7 @@
 }
 
 .sample-button {
-  background-color: #3C4457;
+  background-color: #3c4457;
   border-radius: 5px;
   padding: 5px;
   text-align: center;
@@ -30,7 +30,7 @@
 .beat-bar {
   height: 23px;
   width: 10px;
-  background-color: #2E323B;
+  background-color: #2e323b;
   border-radius: 5px;
 }
 
@@ -44,8 +44,8 @@
 }
 
 .playing {
-  background-color: #1F273A !important;
-  box-shadow: 0 0 12px 0 rgba(0,135,255,.8);
+  background-color: #1f273a !important;
+  box-shadow: 0 0 12px 0 rgba(0, 135, 255, 0.8);
 }
 
 .activePlay {
@@ -55,4 +55,9 @@
 .sample-preview {
   float: right;
   margin: 5px 25px 0px -20px;
+}
+
+.master-settings {
+  background-color: #3c4457;
+  border-radius: 5px;
 }

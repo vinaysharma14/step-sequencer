@@ -6,6 +6,7 @@ const ChannelRackStore = types.model('ChannelRackStore', {
   beatBars: types.array(types.boolean),
   sampleVolume: types.number,
   mutedVolume: types.number,
+  masterVolume: types.number,
 });
 
 export default ChannelRackStore;

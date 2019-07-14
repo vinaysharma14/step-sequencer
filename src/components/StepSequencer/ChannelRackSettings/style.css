@@ -26,3 +26,7 @@
 .cursor {
   cursor: pointer;
 }
+
+.vertical-mid {
+  margin-top: -5px;
+}
