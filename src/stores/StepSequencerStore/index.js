@@ -6,6 +6,7 @@ export const StepSequencerStore = types.model('StepSequencer', {
   channelRack: types.array(ChannelRackStore),
   masterVolume: 100,
   masterMuted: 100,
+  recordingNotes: false,
 }).actions((self) => ({
   toggleBeatBar(sampleIndex, beatIndex) {
     self.channelRack[sampleIndex].beatBars[beatIndex] = !self.channelRack[sampleIndex].beatBars[beatIndex];
@@ -157,6 +158,12 @@ export const StepSequencerStore = types.model('StepSequencer', {
       }
     }
     return false;
+  },
+  toggleNoteRecording() {
+    self.recordingNotes = !self.recordingNotes;
+  },
+  recordNotes(sampleIndex, beatCount) {
+    self.channelRack[sampleIndex].beatBars[beatCount] = true;
   },
 }));
 

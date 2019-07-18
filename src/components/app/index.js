@@ -74,11 +74,16 @@ class App extends Component {
   }
 
   handleKeyEvent = (event) => {
-    const { getKeyBindedSample } = this.props.store.stepSequencerStore;
+    const { getKeyBindedSample, recordingNotes, recordNotes } = this.props.store.stepSequencerStore;
+    const { beatCount, playing } = this.props.store.playBarStore;
     const keyCode = event.keyCode;
     const sampleIndex = getKeyBindedSample(keyCode);
 
     if(sampleIndex !== false) {
+      if (playing && recordingNotes) {
+        recordNotes(sampleIndex, beatCount);
+        return;
+      }
       this.playBeats(null, sampleIndex);
     }
   }

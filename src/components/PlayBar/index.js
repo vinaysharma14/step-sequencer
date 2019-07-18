@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { Container, Row, Col } from 'react-bootstrap';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlay, faPause, faStop } from '@fortawesome/free-solid-svg-icons'
+import { faPlay, faPause, faStop, faMicrophone, faMicrophoneAltSlash } from '@fortawesome/free-solid-svg-icons'
 
 import tick from '../../assets/sounds/tick.wav';
 import tock from '../../assets/sounds/tock.wav';
@@ -116,8 +116,29 @@ class PlayBar extends Component {
     }
   }
 
-  playAudio = () => {
+  delayMetronome = ms => new Promise(res => setTimeout(res, ms));
+
+  playMetronomeBeforeRecord = async () => {
     const { playBarStore } = this.props.store;
+    this.tick.play();
+    await this.delayMetronome((60 / playBarStore.bpmCount) * 1000);
+    this.tock.play();
+    await this.delayMetronome((60 / playBarStore.bpmCount) * 1000);
+    this.tock.play();
+    await this.delayMetronome((60 / playBarStore.bpmCount) * 1000);
+    this.tock.play();
+    await this.delayMetronome((60 / playBarStore.bpmCount) * 1000);
+  }
+
+  playAudio = async () => {
+    const { playBarStore } = this.props.store;
+    const { recordingNotes } = this.props.store.stepSequencerStore;
+
+    if (recordingNotes) {
+      clearInterval(this.beatIncrementer);
+      await this.playMetronomeBeforeRecord();
+    }
+
     playBarStore.playAudio();
     if (playBarStore.metronomeActive && playBarStore.playing) {
       clearInterval(this.beatIncrementer);
@@ -166,6 +187,7 @@ class PlayBar extends Component {
 
   render() {
     const { playBarStore } = this.props.store;
+    const { recordingNotes, toggleNoteRecording } = this.props.store.stepSequencerStore;
     return (
       <Container className="playbar">
         <Row>
@@ -183,6 +205,19 @@ class PlayBar extends Component {
                 className={playBarStore.playing ? "playbar-icon" : "playbar-icon inactive"}
                 icon={faPause}
                 onClick={this.pauseAudio} />
+            }
+          </Col>
+          <Col className="border-left">
+            {
+              recordingNotes ?
+                <FontAwesomeIcon
+                  className="playbar-icon"
+                  icon={faMicrophone}
+                  onClick={toggleNoteRecording} /> :
+                <FontAwesomeIcon
+                  className="playbar-icon inactive"
+                  icon={faMicrophoneAltSlash}
+                  onClick={toggleNoteRecording} />
             }
           </Col>
           <Col className="border-left">
