@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Container, Row, Col } from 'react-bootstrap';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMusic } from '@fortawesome/free-solid-svg-icons'
-
+import ChannelRack from './ChannelRack';
 import ChannelRackSettings from './ChannelRackSettings'
 import SampleUploader from './SampleUploader';
 import './style.css';
@@ -16,68 +14,31 @@ class StepSequencer extends Component {
     loadChannelRack();
   }
 
-  getBeatBarClass(beatActive, beatIndex) {
-    const { playing, paused } = this.props.store.playBarStore;
-    let { beatCount } = this.props.store.playBarStore;
-    let barClass = "beat-bar";
+  state = {
+    masterKeyboardToggled: false,
+  }
 
-    beatCount = beatCount - 1;
-    if (beatCount === -1) {
-      beatCount = 31;
-    }
-
-    if (beatIndex === beatCount && (playing || paused)) {
-      if (beatActive) {
-        return barClass.concat(" activePlay");
-      }
-      return barClass.concat(" playing");
-    }
-
-    if (beatActive) {
-      return barClass.concat(" playing");
-    }
-
-    return barClass;
+  toggleMasterKeyboard = () => {
+    this.setState((prevState) => ({
+      masterKeyboardToggled: !prevState.masterKeyboardToggled,
+    }))
   }
 
   render() {
-    const { channelRack, toggleBeatBar, masterVolume } = this.props.store.stepSequencerStore;
+    const { channelRack, masterVolume } = this.props.store.stepSequencerStore;
     const { playBeats } = this.props;
 
     return (
       <Container className="step-sequencer">
         {
           channelRack.map((item, sampleIndex) =>
-            <Row key={sampleIndex}>
-              <Col lg={2} className="mt-3">
-                <div className="sample-button">
-                  {item.sampleName}
-                  <FontAwesomeIcon
-                    icon={faMusic}
-                    className="sample-preview"
-                    onClick={e => playBeats(null, sampleIndex)}
-                  />
-                </div>
-              </Col>
-              <Col lg={6} className="border-left">
-                <div className="sample-button mt-3 flex">
-                  {
-                    item.beatBars.map((beatActive, index) =>
-                      <div
-                        key={index}
-                        onClick={e => toggleBeatBar(sampleIndex, index)}
-                        className={this.getBeatBarClass(beatActive, index)}
-                      />)
-                  }
-                </div>
-              </Col>
-              <Col lg={4} className="border-left">
-                <ChannelRackSettings
-                  sampleIndex={sampleIndex}
-                  sampleVolume={masterVolume !== 100 ? item.masterVolume : item.sampleVolume}
-                />
-              </Col>
-            </Row>)
+            <ChannelRack
+              key={sampleIndex}
+              sampleIndex={sampleIndex}
+              item={item}
+              playBeats={playBeats}
+              masterKeyboardToggled={this.state.masterKeyboardToggled}
+            />)
         }
         <Row>
           <Col lg={2} className="mt-3 mb-3">
@@ -88,6 +49,8 @@ class StepSequencer extends Component {
               <ChannelRackSettings
                 masterSettings
                 sampleVolume={masterVolume}
+                toggleMasterKeyboard={this.toggleMasterKeyboard}
+                masterKeyboardToggled={this.state.masterKeyboardToggled}
               />
             </div>
           </Col>

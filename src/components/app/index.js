@@ -17,6 +17,10 @@ class App extends Component {
     trapKickSample: new Audio(trapKick),
   }
 
+  componentDidMount() {
+    document.addEventListener('keydown', this.handleKeyEvent);
+  }
+
   playBeats = (beatCount, previewSample) => {
     const { playUploadedSamples } = this.props.store.stepSequencerStore;
     this.playDefaultSamples(beatCount, previewSample);
@@ -66,6 +70,16 @@ class App extends Component {
       const trapSnareSample = new Audio(trapSnare);
       trapSnareSample.volume = getSampleVolume(5);
       trapSnareSample.play();
+    }
+  }
+
+  handleKeyEvent = (event) => {
+    const { getKeyBindedSample } = this.props.store.stepSequencerStore;
+    const keyCode = event.keyCode;
+    const sampleIndex = getKeyBindedSample(keyCode);
+
+    if(sampleIndex !== false) {
+      this.playBeats(null, sampleIndex);
     }
   }
 

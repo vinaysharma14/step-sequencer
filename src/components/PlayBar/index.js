@@ -19,6 +19,14 @@ class PlayBar extends Component {
     this.tock.load();
   }
 
+  state = {
+    playAudio: true,
+  }
+
+  componentDidMount() {
+    document.addEventListener('keydown', this.handleKeyEvent);
+  }
+
   incrementBeat = () => {
     const { beatCount, metronomeActive, handleBeatCountChange, playing } = this.props.store.playBarStore;
     const { playBeats } = this.props;
@@ -120,12 +128,18 @@ class PlayBar extends Component {
       this.triggerBeatIncrement();
       this.incrementBeat();
     }
+    this.setState({
+      playAudio: false,
+    });
   }
 
   pauseAudio = () => {
     const { playBarStore } = this.props.store;
     playBarStore.pauseAudio();
     clearInterval(this.beatIncrementer);
+    this.setState({
+      playAudio: true,
+    });
   }
 
   triggerBeatIncrement = () => {
@@ -134,6 +148,20 @@ class PlayBar extends Component {
       this.incrementBeat,
       (60 / playBarStore.bpmCount) * 125
     );
+  }
+
+  handleKeyEvent = (event) => {
+    const keyCode = event.keyCode;
+    const { playAudio } = this.state;
+
+    if (keyCode === 32) {
+      if (playAudio) {
+        this.playAudio();
+      }
+      else {
+        this.pauseAudio();
+      }
+    }
   }
 
   render() {

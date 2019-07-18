@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUndo, faVolumeUp, faVolumeMute } from '@fortawesome/free-solid-svg-icons'
+import { faUndo, faVolumeUp, faVolumeMute, faKeyboard } from '@fortawesome/free-solid-svg-icons'
 
 import './style.css';
 
@@ -59,8 +59,19 @@ class ChannelRackSettings extends Component {
   }
 
   render() {
+    const { masterSettings, toggleMasterKeyboard, masterKeyboardToggled } = this.props;
     return (
       <div className="channel-settings mt-3">
+        {
+          masterSettings &&
+          <div className={masterKeyboardToggled ? "master-keyboard toggled" : "master-keyboard"}>
+            <FontAwesomeIcon
+              icon={faKeyboard}
+              className="cursor"
+              onClick={toggleMasterKeyboard}
+            />
+          </div>
+        }
         <p
           className="cursor vertical-mid"
           onClick={e => this.setChannelFrequency(1)}

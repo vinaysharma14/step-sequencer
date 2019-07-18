@@ -143,7 +143,21 @@ export const StepSequencerStore = types.model('StepSequencer', {
         }
       }
     }
-  }
+  },
+  bindKey(sampleIndex, keyInput) {
+    const keyCode = keyInput.charCodeAt(0);
+    if (!isNaN(keyCode) || keyInput === '') {
+      self.channelRack[sampleIndex].bindedKey = keyCode;
+    }
+  },
+  getKeyBindedSample(keyCode) {
+    for (var sampleIndex = 0; sampleIndex < self.channelRack.length; sampleIndex++) {
+      if (self.channelRack[sampleIndex].bindedKey === keyCode) {
+        return sampleIndex;
+      }
+    }
+    return false;
+  },
 }));
 
 export const StepSequencerStoreInstance = StepSequencerStore.create({});

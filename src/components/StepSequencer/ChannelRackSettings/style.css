@@ -30,3 +30,14 @@
 .vertical-mid {
   margin-top: -5px;
 }
+
+.master-keyboard {
+  width: 30px;
+  text-align: center;
+  margin: -5px 0 4px 0;
+}
+
+.toggled {
+  border-radius: 5px;
+  border: 1px solid white;
+}
