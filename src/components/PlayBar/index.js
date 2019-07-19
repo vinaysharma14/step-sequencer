@@ -114,6 +114,9 @@ class PlayBar extends Component {
     if (playBarStore.metronomeActive) {
       this.toggleMetronome();
     }
+    this.setState({
+      playAudio: true,
+    });
   }
 
   playAudio = () => {
