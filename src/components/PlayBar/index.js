@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Container, Row, Col } from 'react-bootstrap';
+import { Howl } from 'howler';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlay, faPause, faStop, faMicrophone, faMicrophoneAltSlash } from '@fortawesome/free-solid-svg-icons'
@@ -13,9 +14,13 @@ import './style.css';
 class PlayBar extends Component {
   constructor(props) {
     super(props);
-    this.tick = new Audio(tick);
+    this.tick = new Howl({
+      src: [tick],
+    });
     this.tick.load();
-    this.tock = new Audio(tock);
+    this.tock = new Howl({
+      src: [tock],
+    });
     this.tock.load();
   }
 

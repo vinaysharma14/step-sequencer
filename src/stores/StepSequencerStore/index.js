@@ -1,4 +1,5 @@
 import { types } from 'mobx-state-tree';
+import { Howl } from 'howler';
 
 import ChannelRackStore from './ChannelRackStore';
 
@@ -132,14 +133,18 @@ export const StepSequencerStore = types.model('StepSequencer', {
   playUploadedSamples(beatCount, previewSample) {
     const channelRack = self.channelRack;
     if (previewSample && previewSample > 5) {
-      const uploadedSample = new Audio(channelRack[previewSample].base64);
-      uploadedSample.volume = this.getSampleVolume(previewSample);
+      const uploadedSample = new Howl({
+        src: [channelRack[previewSample].base64],
+        volume: this.getSampleVolume(previewSample),
+      });
       uploadedSample.play();
     } else {
       for (var sampleIndex = 5; sampleIndex < channelRack.length; sampleIndex++) {
         if (channelRack[sampleIndex].beatBars[beatCount]) {
-          const uploadedSample = new Audio(channelRack[sampleIndex].base64);
-          uploadedSample.volume = this.getSampleVolume(sampleIndex);
+          const uploadedSample = new Howl({
+            src: [channelRack[sampleIndex].base64],
+            volume: this.getSampleVolume(sampleIndex),
+          });
           uploadedSample.play();
         }
       }
