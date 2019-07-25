@@ -7,6 +7,10 @@ import { faUndo, faVolumeUp, faVolumeMute, faKeyboard } from '@fortawesome/free-
 import './style.css';
 
 class ChannelRackSettings extends Component {
+  state = {
+    patternRepeaters: [1, 2, 4, 8],
+  }
+
   handleVolumeChange = (event) => {
     const { handleVolumeChange, changeMasterVolume } = this.props.store.stepSequencerStore;
     const { sampleIndex, masterSettings } = this.props;
@@ -60,6 +64,7 @@ class ChannelRackSettings extends Component {
 
   render() {
     const { masterSettings, toggleMasterKeyboard, masterKeyboardToggled } = this.props;
+    const { patternRepeaters } = this.state;
     return (
       <div className="channel-settings mt-3">
         {
@@ -72,26 +77,16 @@ class ChannelRackSettings extends Component {
             />
           </div>
         }
-        <p
-          className="cursor vertical-mid"
-          onClick={e => this.setChannelFrequency(1)}
-        >
-          x1</p>
-        <p
-          className="cursor vertical-mid"
-          onClick={e => this.setChannelFrequency(2)}
-        >
-          x2</p>
-        <p
-          className="cursor vertical-mid"
-          onClick={e => this.setChannelFrequency(4)}
-        >
-          x4</p>
-        <p
-          className="cursor vertical-mid"
-          onClick={e => this.setChannelFrequency(8)}
-        >
-          x8</p>
+        {
+          patternRepeaters.map((frequencyCount, index) => (
+            <p
+              key={index}
+              className="cursor vertical-mid"
+              onClick={e => this.setChannelFrequency(frequencyCount)}
+            >
+              {frequencyCount.toString().concat('x')}</p>
+          ))
+        }
         <FontAwesomeIcon
           icon={faUndo}
           className="cursor"
