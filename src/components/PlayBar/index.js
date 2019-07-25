@@ -250,7 +250,7 @@ class PlayBar extends Component {
               id="bpm_input"
               type="text"
               name="name" />
-            BPM
+              <span className="bpm">BPM</span>
           </Col>
         </Row>
       </Container>

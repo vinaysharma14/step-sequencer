@@ -8,7 +8,7 @@
   border-radius: 10px;
   border: 1px solid #3c4457;
   width: 50%;
-  filter: contrast(1.3);
+  filter: contrast(1.2);
 }
 
 .col {
@@ -51,4 +51,10 @@ span :hover {
 
 .metronome-inactive {
   filter: invert(0.5);
+}
+
+@media only screen and (max-width: 991px) {
+  .bpm {
+    display: none;
+  }
 }

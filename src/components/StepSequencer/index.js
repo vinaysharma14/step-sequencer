@@ -41,10 +41,10 @@ class StepSequencer extends Component {
             />)
         }
         <Row>
-          <Col lg={2} className="mt-3 mb-3">
+          <Col lg={2} className="mt-3">
             <SampleUploader />
           </Col>
-          <Col lg={10} className="border-left">
+          <Col lg={10} className="left-border mb-3">
             <div className="master-settings">
               <ChannelRackSettings
                 masterSettings
