@@ -109,7 +109,7 @@ class ChannelRack extends Component {
             }
           </div>
         </Col>
-        <Col lg={6} className="border-left">
+        <Col lg={6} className="left-border">
           <div className="sample-button mt-3 flex">
             {
               item.beatBars.map((beatActive, index) =>
@@ -121,7 +121,7 @@ class ChannelRack extends Component {
             }
           </div>
         </Col>
-        <Col lg={4} className="border-left">
+        <Col lg={4} className="left-border">
           <ChannelRackSettings
             sampleIndex={sampleIndex}
             sampleVolume={masterVolume !== 100 ? item.masterVolume : item.sampleVolume}
