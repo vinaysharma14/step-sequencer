@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { Howl } from 'howler';
+import _ from 'lodash';
 
 import kick from '../../assets/sounds/kick.wav';
 import snare from '../../assets/sounds/snare.wav';
@@ -85,7 +86,7 @@ class App extends Component {
     }
   }
 
-  handleKeyEvent = (event) => {
+  handleKeyEvent = _.throttle((event) => {
     const { getKeyBindedSample, recordingNotes, recordNotes } = this.props.store.stepSequencerStore;
     const { beatCount, playing } = this.props.store.playBarStore;
     const keyCode = event.keyCode;
@@ -98,7 +99,7 @@ class App extends Component {
       }
       this.playBeats(null, sampleIndex);
     }
-  }
+  }, 50);
 
   render() {
     return (
