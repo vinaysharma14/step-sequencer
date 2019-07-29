@@ -15,9 +15,11 @@ class SampleUploader extends Component {
 
   handleSampleUpload() {
     const { handleSampleUpload } = this.props.store.stepSequencerStore;
-    this.getBase64(this.uploadedSample.current.files[0], base64 => {
-      handleSampleUpload({ name: this.uploadedSample.current.files[0].name, base64 });
-    });
+    for (let i = 0; i < this.uploadedSample.current.files.length; i++) {
+      this.getBase64(this.uploadedSample.current.files[i], base64 => {
+        handleSampleUpload({ name: this.uploadedSample.current.files[i].name, base64 });
+      });
+    }
   }
 
   getBase64(file, callback) {
@@ -36,6 +38,7 @@ class SampleUploader extends Component {
           onChange={this.handleSampleUpload}
           accept="audio/wav"
           className="hidden"
+          multiple
         />
         <label htmlFor="file" className="input-sample">
           <FontAwesomeIcon
