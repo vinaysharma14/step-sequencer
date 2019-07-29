@@ -1,6 +1,13 @@
 import { observable, action } from 'mobx';
 import { Howl } from 'howler';
 
+import kick from '../../assets/sounds/kick.wav';
+import snare from '../../assets/sounds/snare.wav';
+import clap from '../../assets/sounds/clap.wav';
+import ride from '../../assets/sounds/ride.wav';
+import trapKick from '../../assets/sounds/808.wav';
+import trapSnare from '../../assets/sounds/trap.wav';
+
 class StepSequencerStore {
   @observable channelRack = [];
 
@@ -16,12 +23,14 @@ class StepSequencerStore {
 
   @action loadChannelRack = () => {
     const samples = ['Kick', 'Snare', 'Clap', 'Ride', '808', 'Trap'];
+    const sampleSrc = [kick, snare, clap, ride, trapKick, trapSnare];
+
     let channelRack = [];
     let beatBars = [];
     for (var i = 0; i < 32; i++) {
       beatBars.push(false);
     }
-    samples.forEach((sample) => {
+    samples.forEach((sample, index) => {
       channelRack.push({
         sampleName: sample,
         activeBeats: [],
@@ -29,6 +38,10 @@ class StepSequencerStore {
         sampleVolume: 75,
         mutedVolume: 75,
         masterVolume: 75,
+        howlObject: new Howl({
+          src: sampleSrc[index],
+          volume: 0.75,
+        }),
       });
     });
     this.channelRack = channelRack;
@@ -141,7 +154,10 @@ class StepSequencerStore {
       sampleVolume: 75,
       mutedVolume: 75,
       masterVolume: 75,
-      base64: uploadedSample.base64,
+      howlObject: new Howl({
+        src: uploadedSample.base64,
+        volume: 0.75,
+      }),
     };
     this.channelRack.push(newSample);
   }
@@ -189,6 +205,22 @@ class StepSequencerStore {
 
   @action recordNotes = (sampleIndex, beatCount) => {
     this.channelRack[sampleIndex].beatBars[beatCount] = true;
+  }
+
+  @action playBeats = (beatCount) => {
+    const activeSamples = this.getActiveSamples(beatCount);
+    activeSamples.forEach(sampleIndex => {
+      this.playSample(sampleIndex);
+    })
+  }
+
+  @action playSample = (sampleIndex) => {
+    const sample = this.channelRack[sampleIndex];
+    if (sampleIndex === 4) {
+      sample.howlObject.stop();
+    }
+    sample.howlObject.volume(this.getSampleVolume(sampleIndex));
+    sample.howlObject.play();
   }
 }
 
