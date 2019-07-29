@@ -62,32 +62,30 @@ class StepSequencerStore {
       return;
     }
     this.channelRack[sampleIndex].sampleVolume = Number(sampleVolume);
+    this.channelRack[sampleIndex].howlObject.volume(Number(sampleVolume) / 100);
   }
 
   @action muteVolume = (sampleIndex) => {
     let channelRack = this.channelRack[sampleIndex];
     if (this.masterVolume !== 100) {
       channelRack.masterVolume = 0;
+      channelRack.howlObject.volume(0);
       return;
     }
     channelRack.mutedVolume = channelRack.sampleVolume;
     channelRack.sampleVolume = 0;
+    channelRack.howlObject.volume(0);
   }
 
   @action unMuteVolume = (sampleIndex) => {
     let channelRack = this.channelRack[sampleIndex];
     if (this.masterVolume !== 100) {
       channelRack.masterVolume = channelRack.sampleVolume * (this.masterVolume / 100);
+      channelRack.howlObject.volume(channelRack.masterVolume / 100);
       return;
     }
     channelRack.sampleVolume = channelRack.mutedVolume;
-  }
-
-  @action getSampleVolume = (sampleIndex) => {
-    if (this.masterVolume !== 100) {
-      return this.channelRack[sampleIndex].masterVolume / 100;
-    }
-    return this.channelRack[sampleIndex].sampleVolume / 100;
+    channelRack.howlObject.volume(channelRack.mutedVolume / 100);
   }
 
   @action resetChannelRack = (sampleIndex) => {
@@ -136,6 +134,7 @@ class StepSequencerStore {
     for (var sampleIndex = 0; sampleIndex < this.channelRack.length; sampleIndex++) {
       let channelRack = this.channelRack[sampleIndex];
       channelRack.masterVolume = (channelRack.sampleVolume * (newMasterVolume / 100));
+      channelRack.howlObject.volume(channelRack.masterVolume / 100);
     }
     this.masterVolume = newMasterVolume;
   }
@@ -160,27 +159,6 @@ class StepSequencerStore {
       }),
     };
     this.channelRack.push(newSample);
-  }
-
-  @action playUploadedSamples = (beatCount, previewSample) => {
-    const channelRack = this.channelRack;
-    if (previewSample && previewSample > 5) {
-      const uploadedSample = new Howl({
-        src: [channelRack[previewSample].base64],
-        volume: this.getSampleVolume(previewSample),
-      });
-      uploadedSample.play();
-    } else {
-      for (var sampleIndex = 5; sampleIndex < channelRack.length; sampleIndex++) {
-        if (channelRack[sampleIndex].beatBars[beatCount]) {
-          const uploadedSample = new Howl({
-            src: [channelRack[sampleIndex].base64],
-            volume: this.getSampleVolume(sampleIndex),
-          });
-          uploadedSample.play();
-        }
-      }
-    }
   }
 
   @action bindKey = (sampleIndex, keyInput) => {
@@ -219,7 +197,6 @@ class StepSequencerStore {
     if (sampleIndex === 4) {
       sample.howlObject.stop();
     }
-    sample.howlObject.volume(this.getSampleVolume(sampleIndex));
     sample.howlObject.play();
   }
 }
