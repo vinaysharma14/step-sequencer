@@ -1,40 +1,55 @@
-import { types } from 'mobx-state-tree';
+import { observable, action } from 'mobx';
 
-export const PlayBarStore = types.model('PlayBarStore', {
-  playing: false,
-  paused: false,
-  stopped: true,
-  metronomeActive: false,
-  bpmCount: '128',
-  beatCount: 0,
-}).actions((self) => ({
-  playAudio() {
-    self.playing = true;
-    self.paused = false;
-    self.stopped = false;
-  },
-  pauseAudio() {
-    self.playing = false;
-    self.paused = true;
-    self.stopped = false;
-  },
-  stopAudio() {
-    self.playing = false;
-    self.paused = false;
-    self.stopped = true;
-  },
-  toggleMetronome() {
-    self.metronomeActive = !self.metronomeActive;
-  },
-  handleBpmChange(bpmCount) {
-    self.bpmCount = bpmCount;
-  },
-  handleBeatCountChange() {
-    self.beatCount = (self.beatCount + 1) % 32;
-  },
-  resetBeatCount() {
-    self.beatCount = 0;
-  },
-}));
+class PlayBarStore {
+  @observable playing = false;
 
-export const PlayBarStoreInstance = PlayBarStore.create({});
+  @observable paused = false;
+
+  @observable stopped = true;
+
+  @observable metronomeActive = false;
+
+  @observable bpmCount = '128';
+
+  @observable beatCount = 0;
+
+  constructor(Store) {
+    this.Store = Store;
+  }
+
+  @action playAudio = () => {
+    this.playing = true;
+    this.paused = false;
+    this.stopped = false;
+  }
+
+  @action pauseAudio = () => {
+    this.playing = false;
+    this.paused = true;
+    this.stopped = false;
+  }
+
+  @action stopAudio = () => {
+    this.playing = false;
+    this.paused = false;
+    this.stopped = true;
+  }
+
+  @action toggleMetronome = () => {
+    this.metronomeActive = !this.metronomeActive;
+  }
+
+  @action handleBpmChange = (bpmCount) => {
+    this.bpmCount = bpmCount;
+  }
+
+  @action handleBeatCountChange = () => {
+    this.beatCount = (this.beatCount + 1) % 32;
+  }
+
+  @action resetBeatCount = () => {
+    this.beatCount = 0;
+  }
+}
+
+export default PlayBarStore;

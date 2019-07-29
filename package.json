@@ -42,7 +42,6 @@
     "mini-css-extract-plugin": "0.5.0",
     "mobx": "^5.11.0",
     "mobx-react": "^6.1.1",
-    "mobx-state-tree": "^3.14.0",
     "optimize-css-assets-webpack-plugin": "5.0.1",
     "pnp-webpack-plugin": "1.2.1",
     "postcss-flexbugs-fixes": "4.1.0",
@@ -133,8 +132,19 @@
     ]
   },
   "babel": {
+    "plugins": [
+      [
+        "@babel/plugin-proposal-decorators",
+        {
+          "legacy": true
+        }
+      ]
+    ],
     "presets": [
       "react-app"
     ]
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-decorators": "^7.4.4"
   }
 }

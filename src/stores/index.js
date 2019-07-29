@@ -1,16 +1,11 @@
-import { types } from 'mobx-state-tree';
+import PlayBarStore from './PlayBarStore';
+import StepSequencerStore from './StepSequencerStore';
 
-import { PlayBarStore, PlayBarStoreInstance } from './PlayBarStore';
-import { StepSequencerStore, StepSequencerStoreInstance } from './StepSequencerStore';
-
-const GlobalStore = types.model({
-  playBarStore: PlayBarStore,
-  stepSequencerStore: StepSequencerStore,
-});
-
-const Store = GlobalStore.create({
-  playBarStore: PlayBarStoreInstance,
-  stepSequencerStore: StepSequencerStoreInstance,
-});
+class Store {
+  constructor() {
+    this.playBarStore = new PlayBarStore(this);
+    this.stepSequencerStore = new StepSequencerStore(this);
+  }
+}
 
 export default Store;

@@ -1,18 +1,20 @@
-import { types } from 'mobx-state-tree';
+import { observable, action } from 'mobx';
 import { Howl } from 'howler';
 
-import ChannelRackStore from './ChannelRackStore';
+class StepSequencerStore {
+  @observable channelRack = [];
 
-export const StepSequencerStore = types.model('StepSequencer', {
-  channelRack: types.array(ChannelRackStore),
-  masterVolume: 100,
-  masterMuted: 100,
-  recordingNotes: false,
-}).actions((self) => ({
-  toggleBeatBar(sampleIndex, beatIndex) {
-    self.channelRack[sampleIndex].beatBars[beatIndex] = !self.channelRack[sampleIndex].beatBars[beatIndex];
-  },
-  loadChannelRack() {
+  @observable masterVolume = 100;
+
+  @observable masterMuted = 100;
+
+  @observable recordingNotes = false;
+
+  @action toggleBeatBar = (sampleIndex, beatIndex) => {
+    this.channelRack[sampleIndex].beatBars[beatIndex] = !this.channelRack[sampleIndex].beatBars[beatIndex];
+  }
+
+  @action loadChannelRack = () => {
     const samples = ['Kick', 'Snare', 'Clap', 'Ride', '808', 'Trap'];
     let channelRack = [];
     let beatBars = [];
@@ -29,90 +31,103 @@ export const StepSequencerStore = types.model('StepSequencer', {
         masterVolume: 75,
       });
     });
-    self.channelRack = channelRack;
-  },
-  getActiveSamples(beatCount) {
+    this.channelRack = channelRack;
+  }
+
+  @action getActiveSamples = (beatCount) => {
     let activeSamples = [];
-    for (var i = 0; i < self.channelRack.length; i++) {
-      if (self.channelRack[i].beatBars[beatCount]) {
+    for (var i = 0; i < this.channelRack.length; i++) {
+      if (this.channelRack[i].beatBars[beatCount]) {
         activeSamples.push(i);
       }
     }
     return activeSamples;
-  },
-  handleVolumeChange(sampleIndex, sampleVolume) {
-    if (self.masterVolume !== 100) {
+  }
+
+  @action handleVolumeChange = (sampleIndex, sampleVolume) => {
+    if (this.masterVolume !== 100) {
       return;
     }
-    self.channelRack[sampleIndex].sampleVolume = Number(sampleVolume);
-  },
-  muteVolume(sampleIndex) {
-    let channelRack = self.channelRack[sampleIndex];
-    if (self.masterVolume !== 100) {
+    this.channelRack[sampleIndex].sampleVolume = Number(sampleVolume);
+  }
+
+  @action muteVolume = (sampleIndex) => {
+    let channelRack = this.channelRack[sampleIndex];
+    if (this.masterVolume !== 100) {
       channelRack.masterVolume = 0;
       return;
     }
     channelRack.mutedVolume = channelRack.sampleVolume;
     channelRack.sampleVolume = 0;
-  },
-  unMuteVolume(sampleIndex) {
-    let channelRack = self.channelRack[sampleIndex];
-    if (self.masterVolume !== 100) {
-      channelRack.masterVolume = channelRack.sampleVolume * (self.masterVolume / 100);
+  }
+
+  @action unMuteVolume = (sampleIndex) => {
+    let channelRack = this.channelRack[sampleIndex];
+    if (this.masterVolume !== 100) {
+      channelRack.masterVolume = channelRack.sampleVolume * (this.masterVolume / 100);
       return;
     }
     channelRack.sampleVolume = channelRack.mutedVolume;
-  },
-  getSampleVolume(sampleIndex) {
-    if (self.masterVolume !== 100) {
-      return self.channelRack[sampleIndex].masterVolume / 100;
+  }
+
+  @action getSampleVolume = (sampleIndex) => {
+    if (this.masterVolume !== 100) {
+      return this.channelRack[sampleIndex].masterVolume / 100;
     }
-    return self.channelRack[sampleIndex].sampleVolume / 100;
-  },
-  resetChannelRack(sampleIndex) {
-    self.channelRack[sampleIndex].beatBars.fill(false, 0, 32);
-  },
-  setChannelFrequency(sampleIndex, frequencyCount) {
-    for (let i = 0; i < self.channelRack[sampleIndex].beatBars.length; i++) {
+    return this.channelRack[sampleIndex].sampleVolume / 100;
+  }
+
+  @action resetChannelRack = (sampleIndex) => {
+    this.channelRack[sampleIndex].beatBars.fill(false, 0, 32);
+  }
+
+  @action setChannelFrequency = (sampleIndex, frequencyCount) => {
+    for (let i = 0; i < this.channelRack[sampleIndex].beatBars.length; i++) {
       if (i % frequencyCount === 0) {
-        self.channelRack[sampleIndex].beatBars[i] = true;
+        this.channelRack[sampleIndex].beatBars[i] = true;
       } else {
-        self.channelRack[sampleIndex].beatBars[i] = false;
+        this.channelRack[sampleIndex].beatBars[i] = false;
       }
     }
-  },
-  resetMaster() {
-    for (var i = 0; i < self.channelRack.length; i++) {
+  }
+
+  @action resetMaster = () => {
+    for (var i = 0; i < this.channelRack.length; i++) {
       this.resetChannelRack(i);
     }
-  },
-  setMasterFrequency(frequencyCount) {
-    for (var i = 0; i < self.channelRack.length; i++) {
+  }
+
+  @action setMasterFrequency = (frequencyCount) => {
+    for (var i = 0; i < this.channelRack.length; i++) {
       this.setChannelFrequency(i, frequencyCount);
     }
-  },
-  muteMaster() {
-    self.masterMuted = self.masterVolume;
-    self.masterVolume = 0;
-    for (var sampleIndex = 0; sampleIndex < self.channelRack.length; sampleIndex++) {
+  }
+
+  @action muteMaster = () => {
+    this.masterMuted = this.masterVolume;
+    this.masterVolume = 0;
+    for (var sampleIndex = 0; sampleIndex < this.channelRack.length; sampleIndex++) {
       this.muteVolume(sampleIndex);
     }
-  },
-  unMuteMaster() {
-    self.masterVolume = self.masterMuted;
-    for (var sampleIndex = 0; sampleIndex < self.channelRack.length; sampleIndex++) {
+  }
+
+  @action unMuteMaster = () => {
+    this.masterVolume = this.masterMuted;
+    for (var sampleIndex = 0; sampleIndex < this.channelRack.length; sampleIndex++) {
       this.unMuteVolume(sampleIndex);
     }
-  },
-  changeMasterVolume(newMasterVolume) {
+  }
+
+  @action changeMasterVolume = (newMasterVolume) => {
     newMasterVolume = Number(newMasterVolume);
-    for (var sampleIndex = 0; sampleIndex < self.channelRack.length; sampleIndex++) {
-      let channelRack = self.channelRack[sampleIndex];
+    for (var sampleIndex = 0; sampleIndex < this.channelRack.length; sampleIndex++) {
+      let channelRack = this.channelRack[sampleIndex];
       channelRack.masterVolume = (channelRack.sampleVolume * (newMasterVolume / 100));
     }
-    self.masterVolume = newMasterVolume;
-  },
-  handleSampleUpload(uploadedSample) {
+    this.masterVolume = newMasterVolume;
+  }
+
+  @action handleSampleUpload = (uploadedSample) => {
     let sampleName = uploadedSample.name.split('.')[0];
     sampleName = sampleName.charAt(0).toUpperCase() + sampleName.slice(1);
     let beatBars = [];
@@ -128,10 +143,11 @@ export const StepSequencerStore = types.model('StepSequencer', {
       masterVolume: 75,
       base64: uploadedSample.base64,
     };
-    self.channelRack.push(newSample);
-  },
-  playUploadedSamples(beatCount, previewSample) {
-    const channelRack = self.channelRack;
+    this.channelRack.push(newSample);
+  }
+
+  @action playUploadedSamples = (beatCount, previewSample) => {
+    const channelRack = this.channelRack;
     if (previewSample && previewSample > 5) {
       const uploadedSample = new Howl({
         src: [channelRack[previewSample].base64],
@@ -149,27 +165,31 @@ export const StepSequencerStore = types.model('StepSequencer', {
         }
       }
     }
-  },
-  bindKey(sampleIndex, keyInput) {
+  }
+
+  @action bindKey = (sampleIndex, keyInput) => {
     const keyCode = keyInput.charCodeAt(0);
     if (!isNaN(keyCode) || keyInput === '') {
-      self.channelRack[sampleIndex].bindedKey = keyCode;
+      this.channelRack[sampleIndex].bindedKey = keyCode;
     }
-  },
-  getKeyBindedSample(keyCode) {
-    for (var sampleIndex = 0; sampleIndex < self.channelRack.length; sampleIndex++) {
-      if (self.channelRack[sampleIndex].bindedKey === keyCode) {
+  }
+
+  @action getKeyBindedSample = (keyCode) => {
+    for (var sampleIndex = 0; sampleIndex < this.channelRack.length; sampleIndex++) {
+      if (this.channelRack[sampleIndex].bindedKey === keyCode) {
         return sampleIndex;
       }
     }
     return false;
-  },
-  toggleNoteRecording() {
-    self.recordingNotes = !self.recordingNotes;
-  },
-  recordNotes(sampleIndex, beatCount) {
-    self.channelRack[sampleIndex].beatBars[beatCount] = true;
-  },
-}));
+  }
 
-export const StepSequencerStoreInstance = StepSequencerStore.create({});
+  @action toggleNoteRecording = () => {
+    this.recordingNotes = !this.recordingNotes;
+  }
+
+  @action recordNotes = (sampleIndex, beatCount) => {
+    this.channelRack[sampleIndex].beatBars[beatCount] = true;
+  }
+}
+
+export default StepSequencerStore;
