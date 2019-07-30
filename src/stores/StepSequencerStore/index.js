@@ -22,24 +22,30 @@ class StepSequencerStore {
   }
 
   @action loadChannelRack = () => {
-    const samples = ['Kick', 'Snare', 'Clap', 'Ride', '808', 'Trap'];
-    const sampleSrc = [kick, snare, clap, ride, trapKick, trapSnare];
+    const samples = [
+      { name: 'Kick', source: kick },
+      { name: 'Snare', source: snare },
+      { name: 'Clap', source: clap },
+      { name: 'Ride', source: ride },
+      { name: '808', source: trapKick },
+      { name: 'Trap', source: trapSnare },
+    ];
 
     let channelRack = [];
     let beatBars = [];
     for (var i = 0; i < 32; i++) {
       beatBars.push(false);
     }
-    samples.forEach((sample, index) => {
+    samples.forEach((sample) => {
       channelRack.push({
-        sampleName: sample,
+        sampleName: sample.name,
         activeBeats: [],
         beatBars,
         sampleVolume: 75,
         mutedVolume: 75,
         masterVolume: 75,
         howlObject: new Howl({
-          src: sampleSrc[index],
+          src: sample.source,
           volume: 0.75,
         }),
       });
