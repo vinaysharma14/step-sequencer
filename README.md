@@ -3,8 +3,10 @@
 It is an application that can be used to produce beats. Some default audio samples have been provided for you to get going.
 You can bind keyboard with samples, and record your beats just like a midi controller and much more!
 
+```
 The step sequencer is developed in React JS.
 *Inspired by Image Line's FL Studio.*
+```
 
 ## Demo
 
