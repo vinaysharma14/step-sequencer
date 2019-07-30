@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/step-sequencer/static/css/main.e0d2dd0c.chunk.css",
+    "main.js": "/step-sequencer/static/js/main.8d24723d.chunk.js",
+    "main.js.map": "/step-sequencer/static/js/main.8d24723d.chunk.js.map",
+    "runtime~main.js": "/step-sequencer/static/js/runtime~main.f37c02fa.js",
+    "runtime~main.js.map": "/step-sequencer/static/js/runtime~main.f37c02fa.js.map",
+    "static/js/2.07866aaf.chunk.js": "/step-sequencer/static/js/2.07866aaf.chunk.js",
+    "static/js/2.07866aaf.chunk.js.map": "/step-sequencer/static/js/2.07866aaf.chunk.js.map",
+    "index.html": "/step-sequencer/index.html",
+    "precache-manifest.4b0da9f6c58b9d02d586b3e83b50f400.js": "/step-sequencer/precache-manifest.4b0da9f6c58b9d02d586b3e83b50f400.js",
+    "service-worker.js": "/step-sequencer/service-worker.js",
+    "static/css/main.e0d2dd0c.chunk.css.map": "/step-sequencer/static/css/main.e0d2dd0c.chunk.css.map",
+    "static/media/808.wav": "/step-sequencer/static/media/808.c443e296.wav",
+    "static/media/clap.wav": "/step-sequencer/static/media/clap.b64371ab.wav",
+    "static/media/kick.wav": "/step-sequencer/static/media/kick.1b2e3745.wav",
+    "static/media/metronome.png": "/step-sequencer/static/media/metronome.e5e3392e.png",
+    "static/media/ride.wav": "/step-sequencer/static/media/ride.9ef541f1.wav",
+    "static/media/snare.wav": "/step-sequencer/static/media/snare.f8fee813.wav",
+    "static/media/tick.wav": "/step-sequencer/static/media/tick.7a7930a2.wav",
+    "static/media/tock.wav": "/step-sequencer/static/media/tock.fe0ded65.wav",
+    "static/media/trap.wav": "/step-sequencer/static/media/trap.24821dd0.wav"
+  }
+}
