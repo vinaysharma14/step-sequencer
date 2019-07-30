@@ -3,7 +3,7 @@
 ![Image Of Step Sequencer](https://i.imgur.com/Jo9YAsK.png)
 
 It is an application that can be used to produce beats. Some default audio samples have been provided for you to get going.
-You can bind keyboard with samples, and record your beats just like any midi controller and much more!
+You can even bind keyboard with samples, and record your beats just like any midi controller and much more!
 
 The step sequencer is developed in React JS.
 
