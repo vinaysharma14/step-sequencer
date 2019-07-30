@@ -8,8 +8,7 @@ The step sequencer is developed in React JS.
 
 ## Demo
 
-The application is deployed using GitHub Pages.
-[Step Sequencer] (https://vinaysharma14.github.io/step-sequencer/)
+The [Step Sequencer](https://vinaysharma14.github.io/step-sequencer/) is deployed using GitHub Pages.
 
 ## Installation
 
@@ -24,4 +23,4 @@ npm start
 
 ## Audio Library Used
 
-Check out this amazing [Howler JS] (https://howlerjs.com/) library that was as easy as pie to implement in the step sequencer! 
+Check out this amazing [Howler JS](https://howlerjs.com/) library that was as easy as pie to implement in the step sequencer! 
